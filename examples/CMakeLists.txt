@@ -1,3 +1,9 @@
+# Set the prefix path to find pybind11
+set(CMAKE_PREFIX_PATH "/usr/local;/usr/local/lib/python3.10/dist-packages/pybind11/share/cmake/pybind11")
+
+# Add pybind11 module
+find_package(pybind11 REQUIRED)
+
 add_executable(nested_table nested_table.cc)
 target_link_libraries(nested_table libcuckoo)
 
@@ -17,3 +23,8 @@ add_executable(c_hash c_hash.c)
 target_link_libraries(c_hash int_str_table blob_blob_table)
 
 set_property(TARGET c_hash PROPERTY C_STANDARD 99)
+
+# Add pycuckoo module
+add_library(pycuckoo MODULE python_bindings.cc)
+target_link_libraries(pycuckoo PRIVATE pybind11::module libcuckoo)
+set_target_properties(pycuckoo PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}" SUFFIX "${PYTHON_MODULE_EXTENSION}")

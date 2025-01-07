@@ -666,6 +666,28 @@ public:
     return erase_fn(key, [](mapped_type &) { return true; });
   }
 
+      /**
+     * Erases the key from the table and returns the associated value.
+     * If the key is not found, throws std::out_of_range.
+     *
+     * @param key the key to erase from the table
+     * @return the value associated with the erased key
+     * @throw std::out_of_range if the key is not found
+     */
+    template <typename K>
+    T erase_and_return(const K &key) {
+        const hash_value hv = hashed_key(key);
+        const auto b = snapshot_and_lock_two<normal_mode>(hv);
+        const table_position pos = cuckoo_find(key, hv.partial, b.i1, b.i2);
+        if (pos.status == ok) {
+            T value = std::move(buckets_[pos.index].mapped(pos.slot));
+            del_from_bucket(pos.index, pos.slot);
+            return value;
+        } else {
+            throw std::out_of_range("key not found in table");
+        }
+    }
+
   /**
    * Resizes the table to the given hashpower. If this hashpower is not larger
    * than the current hashpower, then it decreases the hashpower to the
