@@ -3,6 +3,11 @@ project(libcuckoo
     VERSION 0.3.1
     LANGUAGES C CXX)
 
+# Set C++ standard to C++17 (needed for std::optional in pybind11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # put these in the cache so they show up in ccmake
 option (BUILD_EXAMPLES "build example libcuckoo programs")
 
