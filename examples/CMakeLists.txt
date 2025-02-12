@@ -27,4 +27,4 @@ set_property(TARGET c_hash PROPERTY C_STANDARD 99)
 # Add pycuckoo module
 add_library(pycuckoo MODULE python_bindings.cc)
 target_link_libraries(pycuckoo PRIVATE pybind11::module libcuckoo)
-set_target_properties(pycuckoo PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}" SUFFIX "${PYTHON_MODULE_EXTENSION}")
+set_target_properties(pycuckoo PROPERTIES PREFIX "" SUFFIX ".so")
